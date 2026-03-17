@@ -1,10 +1,16 @@
 public class Account {
+    private String name;
     private String pin;
     private double balance;
 
-    public Account(String pin, double balance) {
+    public Account(String name, String pin, double balance) {
+        this.name = name;
         this.pin = pin;
         this.balance = balance;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getPin() {
@@ -25,5 +31,9 @@ public class Account {
             return true;
         }
         return false;
+    }
+
+    public String toFileString() {
+        return name + "," + pin + "," + balance;
     }
 }
