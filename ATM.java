@@ -3,21 +3,27 @@ import java.util.Scanner;
 public class ATM {
     private Account account;
     private Scanner sc = new Scanner(System.in);
+    private boolean accessibilityMode = true;
 
     public ATM(Account account) {
         this.account = account;
     }
 
-    // FR-02 Authentication
+    // AUTHENTICATION WITH BLOCK SYSTEM
     public boolean authenticate() {
         int attempts = 3;
 
         while (attempts > 0) {
-            System.out.print("Enter your 4-digit PIN: ");
+
+            if (accessibilityMode)
+                AccessibilityHelper.guide("Please enter your 4-digit PIN carefully.");
+
+            System.out.print("PIN: ");
             String input = sc.nextLine();
 
-            if (!input.matches("\\d{4}")) {
-                System.out.println("Invalid format. Enter exactly 4 digits.");
+            if (!Validator.isValidPin(input)) {
+                System.out.println("Invalid format.");
+                AccessibilityHelper.help();
                 continue;
             }
 
@@ -26,112 +32,134 @@ public class ATM {
                 return true;
             } else {
                 attempts--;
-                System.out.println("Incorrect PIN. Attempts left: " + attempts);
+                System.out.println("Wrong PIN. Attempts left: " + attempts);
             }
         }
 
-        System.out.println("Account blocked. Exiting...");
+        System.out.println("Session Blocked. Exiting system.");
+        System.exit(0);
         return false;
     }
 
-    // FR-06 Practice Mode
+    // PRACTICE MODE (UNCHANGED BUT ENHANCED)
     public void practiceMode() {
-        System.out.println("\n--- Practice PIN Mode ---");
+        System.out.println("\n--- Practice Mode ---");
 
         while (true) {
-            System.out.print("Enter a 4-digit PIN (or type exit): ");
+            System.out.print("Enter PIN (or exit): ");
             String input = sc.nextLine();
 
             if (input.equalsIgnoreCase("exit")) break;
 
-            if (input.matches("\\d{4}")) {
+            if (Validator.isValidPin(input)) {
                 System.out.println("Correct format ✔");
             } else {
-                System.out.println("Invalid. Must be exactly 4 digits.");
+                System.out.println("Invalid PIN format.");
+                AccessibilityHelper.help();
             }
         }
     }
 
     public void menu() {
         while (true) {
+
             System.out.println("\n===== ATM MENU =====");
             System.out.println("1. Check Balance");
             System.out.println("2. Withdraw Cash");
             System.out.println("3. Deposit Cash");
-            System.out.println("4. Exit");
+            System.out.println("4. Help");
+            System.out.println("5. Exit");
 
-            System.out.print("Choose option: ");
+            System.out.print("Select: ");
             String choice = sc.nextLine();
 
-            switch (choice) {
-                case "1":
-                    checkBalance();
-                    break;
-                case "2":
-                    withdraw();
-                    break;
-                case "3":
-                    deposit();
-                    break;
-                case "4":
-                    System.out.println("Thank you. Goodbye.");
-                    DataStore.saveAccount(account);
-                    return;
-                default:
-                    System.out.println("Invalid choice.");
+            try {
+                switch (choice) {
+                    case "1":
+                        checkBalance();
+                        break;
+                    case "2":
+                        withdraw();
+                        break;
+                    case "3":
+                        deposit();
+                        break;
+                    case "4":
+                        AccessibilityHelper.help();
+                        break;
+                    case "5":
+                        exit();
+                        return;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            } catch (RuntimeException e) {
+                // handles cancelled actions
             }
         }
     }
 
-    // FR-05 Balance Inquiry
+    // BALANCE
     private void checkBalance() {
-        System.out.println("Your balance: ₹" + account.getBalance());
+        System.out.println("Balance: ₹" + account.getBalance());
     }
 
-    // FR-03 Withdrawal
+    // WITHDRAW WITH FULL VALIDATION + CONFIRMATION
     private void withdraw() {
-        System.out.print("Enter amount to withdraw: ");
+
+        if (accessibilityMode)
+            AccessibilityHelper.guide("Enter amount to withdraw.");
+
+        System.out.print("Amount: ");
         String input = sc.nextLine();
 
-        try {
-            double amount = Double.parseDouble(input);
-
-            if (amount <= 0) {
-                System.out.println("Amount must be positive.");
-                return;
-            }
-
-            if (account.withdraw(amount)) {
-                System.out.println("Withdrawal successful.");
-                System.out.println("New balance: ₹" + account.getBalance());
-            } else {
-                System.out.println("Insufficient balance.");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Invalid input.");
+        if (!Validator.isValidAmount(input)) {
+            System.out.println("Invalid amount.");
+            return;
         }
+
+        double amount = Double.parseDouble(input);
+
+        if (amount > account.getBalance()) {
+            System.out.println("Insufficient funds.");
+            return;
+        }
+
+        AccessibilityHelper.confirmStep("withdraw ₹" + amount);
+
+        account.withdraw(amount);
+
+        System.out.println("Withdrawal successful.");
+        System.out.println("New Balance: ₹" + account.getBalance());
     }
 
-    // FR-04 Deposit
+    // DEPOSIT WITH FEEDBACK
     private void deposit() {
-        System.out.print("Enter amount to deposit: ");
+
+        if (accessibilityMode)
+            AccessibilityHelper.guide("Enter amount to deposit.");
+
+        System.out.print("Amount: ");
         String input = sc.nextLine();
 
-        try {
-            double amount = Double.parseDouble(input);
-
-            if (amount <= 0) {
-                System.out.println("Amount must be positive.");
-                return;
-            }
-
-            account.deposit(amount);
-            System.out.println("Deposit successful.");
-            System.out.println("New balance: ₹" + account.getBalance());
-
-        } catch (Exception e) {
-            System.out.println("Invalid input.");
+        if (!Validator.isValidAmount(input)) {
+            System.out.println("Invalid amount.");
+            return;
         }
+
+        double amount = Double.parseDouble(input);
+
+        AccessibilityHelper.confirmStep("deposit ₹" + amount);
+
+        account.deposit(amount);
+
+        System.out.println("Deposit successful.");
+        System.out.println("Updated Balance: ₹" + account.getBalance());
+    }
+
+    // CLEAN EXIT (SRS SCENARIO F)
+    private void exit() {
+        System.out.println("Thank you for using ATM.");
+        DataStore.saveAccount(account);
     }
 }
