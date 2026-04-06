@@ -3,11 +3,22 @@ import java.util.*;
 
 public class ATMInterface {
 
+    public interface AuthControllerFactory {
+        AuthController create(List<Account> accounts);
+    }
+
     private List<Account> accounts;
-    private Scanner sc = new Scanner(System.in);
+    private Scanner sc;
+    private AuthControllerFactory authControllerFactory;
 
     public ATMInterface(List<Account> accounts) {
+        this(accounts, new Scanner(System.in), AuthController::new);
+    }
+
+    public ATMInterface(List<Account> accounts, Scanner sc, AuthControllerFactory authControllerFactory) {
         this.accounts = accounts;
+        this.sc = sc;
+        this.authControllerFactory = authControllerFactory;
     }
 
     public void start() {
@@ -63,7 +74,7 @@ public class ATMInterface {
     }
 
     private void loginFlow() {
-        AuthController auth = new AuthController(accounts);
+        AuthController auth = authControllerFactory.create(accounts);
         Account user = auth.login(sc);
 
         AccountController controller = new AccountController(user);

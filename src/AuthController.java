@@ -3,11 +3,21 @@ import java.util.*;
 
 public class AuthController {
 
+    public interface CaptchaGenerator {
+        int[] nextChallenge();
+    }
+
     private List<Account> accounts;
     private int attempts = 3;
+    private CaptchaGenerator captchaGenerator;
 
     public AuthController(List<Account> accounts) {
+        this(accounts, () -> new int[] { (int) (Math.random() * 10), (int) (Math.random() * 10) });
+    }
+
+    public AuthController(List<Account> accounts, CaptchaGenerator captchaGenerator) {
         this.accounts = accounts;
+        this.captchaGenerator = captchaGenerator;
     }
 
     public Account login(Scanner sc) {
@@ -45,8 +55,9 @@ public class AuthController {
     }
 
     private boolean captcha(Scanner sc) {
-        int a = (int)(Math.random()*10);
-        int b = (int)(Math.random()*10);
+        int[] challenge = captchaGenerator.nextChallenge();
+        int a = challenge[0];
+        int b = challenge[1];
 
         System.out.print("CAPTCHA: " + a + " + " + b + " = ");
         int ans = Integer.parseInt(sc.nextLine());

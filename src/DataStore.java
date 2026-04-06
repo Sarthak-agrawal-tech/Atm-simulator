@@ -4,12 +4,21 @@ import java.util.*;
 
 public class DataStore {
 
-    private static final String FILE_NAME = "data.txt";
+    private static final String DEFAULT_FILE_NAME = "data.txt";
+    private static String fileName = DEFAULT_FILE_NAME;
+
+    public static void setFileName(String updatedFileName) {
+        fileName = updatedFileName;
+    }
+
+    public static void resetFileName() {
+        fileName = DEFAULT_FILE_NAME;
+    }
 
     public static List<Account> loadAccounts() {
         List<Account> accounts = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
 
             while ((line = br.readLine()) != null) {
@@ -36,7 +45,7 @@ public class DataStore {
     }
 
     public static void saveAccounts(List<Account> accounts) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
 
             for (Account acc : accounts) {
                 bw.write(acc.toFileString());

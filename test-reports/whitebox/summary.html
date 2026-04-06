@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ATM White-Box Test Report</title>
+    <style>
+        :root {
+            --bg: #f5efe6;
+            --card: #fffaf3;
+            --ink: #1f2a30;
+            --accent: #0f766e;
+            --warn: #b45309;
+            --danger: #b91c1c;
+            --line: #d6c7b3;
+        }
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(135deg, #f5efe6 0%, #efe3d0 100%);
+            color: var(--ink);
+        }
+        .wrap {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 32px 20px 48px;
+        }
+        .hero, .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(31, 42, 48, 0.08);
+        }
+        .hero {
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: 34px;
+        }
+        .hero p {
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .metric {
+            padding: 18px;
+            border-radius: 14px;
+            background: #fff;
+            border: 1px solid var(--line);
+        }
+        .metric strong {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 6px;
+        }
+        .card {
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+        }
+        th {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .note {
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .accent { color: var(--accent); }
+        .warn { color: var(--warn); }
+        .danger { color: var(--danger); }
+        a { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <section class="hero">
+            <h1>ATM White-Box Test Report</h1>
+            <p>This report gives a simple view of how much of the Java code was exercised by the white-box tests. Covered lines were executed by the tests. Rejected lines are the lines that were not executed and should be reviewed if deeper coverage is needed.</p>
+            <div class="metrics">
+                <div class="metric"><strong class="accent">36</strong>Total tests run</div>
+                <div class="metric"><strong class="accent">36</strong>Tests passed</div>
+                <div class="metric"><strong class="danger">0</strong>Tests failed</div>
+                <div class="metric"><strong class="warn">0</strong>Tests skipped</div>
+                <div class="metric"><strong class="accent">92.83%</strong>Overall line coverage</div>
+                <div class="metric"><strong class="accent">259</strong>Covered lines</div>
+                <div class="metric"><strong class="danger">20</strong>Rejected lines</div>
+            </div>
+        </section>
+        <section class="card">
+            <h2>Coverage By Class</h2>
+            <p class="note">Open any class name to view the detailed JaCoCo page. In those pages, green lines were covered and red lines were missed.</p>
+            <table>
+                <thead><tr><th>Class</th><th>Covered Lines</th><th>Rejected Lines</th><th>Coverage</th></tr></thead>
+                <tbody>
+                    <tr><td><a href='jacoco-html/src/AuthController.html'>AuthController</a></td><td>28</td><td>4</td><td>87.5%</td></tr>
+<tr><td><a href='jacoco-html/src/DataStore.html'>DataStore</a></td><td>34</td><td>3</td><td>91.89%</td></tr>
+<tr><td><a href='jacoco-html/src/ATMInterface.html'>ATMInterface</a></td><td>61</td><td>0</td><td>100%</td></tr>
+<tr><td><a href='jacoco-html/src/Account.html'>Account</a></td><td>15</td><td>0</td><td>100%</td></tr>
+<tr><td><a href='jacoco-html/src/ATM.html'>ATM</a></td><td>62</td><td>10</td><td>86.11%</td></tr>
+<tr><td><a href='jacoco-html/src/AccessibilityHelper.html'>AccessibilityHelper</a></td><td>14</td><td>1</td><td>93.33%</td></tr>
+<tr><td><a href='jacoco-html/src/AccountController.html'>AccountController</a></td><td>36</td><td>0</td><td>100%</td></tr>
+<tr><td><a href='jacoco-html/src/Validator.html'>Validator</a></td><td>5</td><td>1</td><td>83.33%</td></tr>
+<tr><td><a href='jacoco-html/src/Main.html'>Main</a></td><td>4</td><td>1</td><td>80%</td></tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="card">
+            <h2>Failed Tests</h2>
+            <table>
+                <thead><tr><th>Test</th><th>Reason</th></tr></thead>
+                <tbody>
+                    <tr><td colspan='2'>No failed tests in this run.</td></tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="card">
+            <h2>Detailed Files</h2>
+            <p class="note"><a href="jacoco-html/index.html">Open the full JaCoCo detail report</a> for file-by-file and line-by-line inspection.</p>
+        </section>
+    </div>
+</body>
+</html>

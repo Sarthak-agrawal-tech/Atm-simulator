@@ -5,10 +5,15 @@ public class ATM {
 
     private List<Account> accounts;
     private Account currentUser;
-    private Scanner sc = new Scanner(System.in);
+    private Scanner sc;
 
     public ATM(List<Account> accounts) {
+        this(accounts, new Scanner(System.in));
+    }
+
+    public ATM(List<Account> accounts, Scanner sc) {
         this.accounts = accounts;
+        this.sc = sc;
     }
 
     // LOGIN
